@@ -309,13 +309,13 @@ def evaluate(sess, data_type='val'):
     print('#############################################################')
     print('total clicks: %d, total purchase:%d' % (total_clicks, total_purchase))
     for i in range(len(topk)):
-        hr_click=hit_clicks[i]/total_clicks
+        #hr_click=hit_clicks[i]/total_clicks
         hr_purchase=hit_purchase[i]/total_purchase
-        ng_click=ndcg_clicks[i]/total_clicks
+        #ng_click=ndcg_clicks[i]/total_clicks
         ng_purchase=ndcg_purchase[i]/total_purchase
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('cumulative reward @ %d: %f' % (topk[i],total_reward[i]))
-        print('clicks hr ndcg @ %d : %f, %f' % (topk[i],hr_click,ng_click))
+        #print('clicks hr ndcg @ %d : %f, %f' % (topk[i],hr_click,ng_click))
         print('purchase hr and ndcg @%d : %f, %f' % (topk[i], hr_purchase, ng_purchase))
     print('#############################################################')
 
