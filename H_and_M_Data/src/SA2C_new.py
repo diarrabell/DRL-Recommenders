@@ -301,6 +301,7 @@ class QNetwork:
         return all_embeddings
 
 def evaluate(sess, data_type='val'):
+    print(f'Evaluating with {data_type} sessions')
     eval_sessions=pd.read_pickle(os.path.join(data_directory, f'sampled_{data_type}.df'))
     eval_ids = eval_sessions.session_id.unique()
     groups = eval_sessions.groupby('session_id')
@@ -403,8 +404,11 @@ if __name__ == '__main__':
         sess.run(tf.compat.v1.global_variables_initializer())
         #evaluate(sess)
         num_rows=replay_buffer.shape[0]
+        print(f'Number of rows: {num_rows}')
         num_batches=int(num_rows/args.batch_size)
+        print(f'Number of batches: {num_batches}')
         for i in range(args.epoch):
+            print(f'Epoch {i+1}')
             for j in range(num_batches):
                 batch = replay_buffer.sample(n=args.batch_size).to_dict()
 
@@ -508,5 +512,5 @@ if __name__ == '__main__':
                         print("the loss in %dth batch is: %f" % (total_step, loss))
                     if total_step % 4000 == 0:
                         evaluate(sess)
-        
+        print('Finished training')
         evaluate(sess, data_type='test')
