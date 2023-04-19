@@ -287,7 +287,8 @@ def evaluate(sess, data_type='val'):
             id=eval_ids[evaluated]
             group=groups.get_group(id)
             history=[]
-            for index, row in group.iterrows():
+            group_dict = group.to_dict('index')
+            for index, row in group_dict.items():
                 state=list(history)
                 len_states.append(state_size if len(state)>=state_size else 1 if len(state)==0 else len(state))
                 state=pad_history(state,state_size,item_num)
