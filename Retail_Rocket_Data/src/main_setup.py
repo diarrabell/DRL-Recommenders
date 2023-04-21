@@ -4,6 +4,7 @@ import subprocess
 from preprocess_and_split import DataPreparation
 from popularity import Popularity
 from replay_buffer import ReplayBuffer
+from item_features import ItemFeatures
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Set up before using SA2C')
@@ -22,11 +23,21 @@ def main():
       os.path.join(data_directory, '..', 'src/download.sh'))
     subprocess.call([download_file_path, data_directory])
 
+    item_features = ItemFeatures(data_directory)
+    # Retrieve item properties
+    item_properties_df = item_features.combine()
+
     data_preparation = DataPreparation(data_directory)
     # Created sorted events from dataset
-    data_preparation.preprocess()
+    # Retrieve item encoder and IDs for creating item features
+    item_encoder, item_ids_from_events = \
+        data_preparation.preprocess(item_properties_df)
     # Split sorted events into training, validation, and test sessions
     data_preparation.split()
+
+    # Create item features
+    item_features.process(item_properties_df, item_encoder,
+        item_ids_from_events)
 
     # Create popularity dictionary
     popularity = Popularity(data_directory)

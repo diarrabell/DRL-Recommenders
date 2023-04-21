@@ -57,9 +57,6 @@ class DataPreparation:
             sorted_transactions_df = sorted_transactions_df[
                 sorted_transactions_df.session_id.isin(chosen_session_ids)]
 
-        # This is for testing purposes
-        #sorted_transactions_df = sorted_transactions_df[sorted_transactions_df.session_id <= 500]
-
         # Create file 'sorted_events.df'
         to_pickled_df(self.data_directory, sorted_events=sorted_transactions_df)
         print('Finished creating the sorted_events file')

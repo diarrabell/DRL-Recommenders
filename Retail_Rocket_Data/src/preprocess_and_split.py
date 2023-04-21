@@ -8,7 +8,7 @@ class DataPreparation:
     def __init__(self, data_directory):
         self.data_directory = data_directory
 
-    def preprocess(self):
+    def preprocess(self, item_properties_df):
         event_df = pd.read_csv(os.path.join(self.data_directory, 'events.csv'), header=0)
         event_df.columns = ['timestamp','session_id','behavior','item_id','transid']
         ###remove transid column
@@ -20,6 +20,11 @@ class DataPreparation:
         ##########remove items with <=2 interactions
         event_df['valid_item'] = event_df.item_id.map(event_df.groupby('item_id')['session_id'].size() > 2)
         event_df = event_df.loc[event_df.valid_item].drop('valid_item', axis=1)
+        ###### filter for events that have corresponding item properties
+        item_ids_from_properties = item_properties_df['itemid'].unique()
+        event_df=event_df[event_df['item_id'].isin(item_ids_from_properties)]
+        ####### retrieve item ids for filtering item properties        
+        item_ids_from_events = event_df['item_id'].unique()
         ######## transform to ids
         item_encoder = LabelEncoder()
         session_encoder= LabelEncoder()
@@ -35,6 +40,7 @@ class DataPreparation:
         sorted_events.to_csv(os.path.join(self.data_directory, 'sorted_events.csv'), index=None, header=True)
 
         to_pickled_df(self.data_directory, sorted_events=sorted_events)
+        return item_encoder, item_ids_from_events
 
     def split(self):
         print('Started to split the sorted events into train, validation, and test')
