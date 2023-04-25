@@ -461,7 +461,7 @@ if __name__ == '__main__':
                 total_step += 1
                 if total_step % 200 == 0:
                     print("the loss in %dth batch is: %f" % (total_step, loss))
-                if total_step % 4000 == 0:
+                if total_step % 9000 == 0:
                     evaluate(sess, item_features)
         print('Finished training')
         evaluate(sess, item_features, data_type='test')
