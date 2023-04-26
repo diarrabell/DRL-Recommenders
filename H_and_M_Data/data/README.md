@@ -1,0 +1,1 @@
+This empty "data" folder will store the downloaded Kaggle files and subsequent generated files used for training.
