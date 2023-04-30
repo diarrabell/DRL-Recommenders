@@ -7,7 +7,7 @@ from replay_buffer import ReplayBuffer
 from item_features import ItemFeatures
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Set up before using SA2C')
+    parser = argparse.ArgumentParser(description='Set up for using SNQN recommender')
 
     parser.add_argument('--data_directory', nargs='?',
         help='data directory for the Retail Rocket dataset')

@@ -6,7 +6,7 @@ from popularity import Popularity
 from replay_buffer import ReplayBuffer
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Set up before using SA2C')
+    parser = argparse.ArgumentParser(description='Set up for using SNQN recommender')
 
     parser.add_argument('--data_directory', nargs='?',
         help='data directory for the H&M dataset')
