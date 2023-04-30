@@ -16,9 +16,15 @@ The following datasets were chosen for training.
 #### Retail Rocket Dataset
 Retail Rocket provides shoppers with personalized real-time recommendations through multiple channels. The [dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset) contains four files that includes raw data collected from a real-world ecommerce website. All files except for category_tree.csv are used. events.csv contains interaction information for each user, including the timestamp of the interaction, the event type (click, add to cart, or transaction), and the item ID. There are two item_properties.csv files that provide more details on the items for about 90% of the interactions from events.csv. The item property and property values have been hashed for confidentiality purposes.  
 
-## GRU-SNQN Model Overview
+## SNQN Recommender Overview
+The SNQN, or Supervised Negative Q-learning, recommender, addresses the challenges of applying reinforcment learning algorithms directly. SNQN addresses the issue with no real-time feedback during off-policy learning by combining supervised sequential learning with reinforcement learning. Additionally, there often is a lack of sufficient reward signals available, especially negative reward signals, and using only positive reward signals causes the Q-values to be overestimated. The Q-learning loss function of SNQN incorporates action rewards for a sampled set of negative, or unobserved, actions in addition to the positive ones. The deep reinforcement learning portion therefore acts as a self-regularizer by giving higher rewards to positive actions.
 
-## HRNN-meta Model Overview
+In this project, GRU is used as the base model.
+
+## Incorporating Item Features into the SNQN Recommender
+The project uses some components from the **HRNN-meta**, or hierarchical recurrent network with meta data, model. HRNN-meta incorporates user and item features into the recommendation systems through learned embeddings in order to adapt to preferences in real-time and address the "cold-start" problem for new users and items that have not been interacted with yet. 
+
+More specifically, the project uses equation 2 of the [HRNN paper](https://assets.amazon.science/96/71/d1f25754497681133c7aa2b7eb05/temporal-contextual-recommendation-in-real-time.pdf) to incorporate item features only. The learned weights and bias of the item feature vectors are used to calculate phi-prime, and phi-prime and the logits from the GRU model are combined using a lambda value to get the phi-tilde value, which is used as the logits for calculating the cross-entropy loss. 
 
 ## Steps for Setting Up and Running the Code
 For H&M,...
