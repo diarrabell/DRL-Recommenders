@@ -47,13 +47,14 @@ def parse_args():
     parser.add_argument('--num_heads', default=1, type=int,help='number heads (for SASRec)')
     parser.add_argument('--num_blocks', default=1, type=int, help='number heads (for SASRec)')
     parser.add_argument('--dropout_rate', default=0.1, type=float)
+    parser.add_argument('--lambda_val', default=0.2, type=float, help='lambda value used in HRNN paper')
 
 
     return parser.parse_args()
 
 
 class QNetwork:
-    def __init__(self, hidden_size, learning_rate, item_num, state_size, pretrain, name='DQNetwork'):
+    def __init__(self, hidden_size, learning_rate, item_num, state_size, pretrain, lambda_value, num_feature_columns, name='DQNetwork'):
         tf.compat.v1.disable_eager_execution()
         self.state_size = state_size
         self.learning_rate = learning_rate
@@ -66,6 +67,8 @@ class QNetwork:
         self.is_training = tf.compat.v1.placeholder(tf.bool, shape=())
         # self.save_file = save_file
         self.name = name
+        self.lambda_value = lambda_value
+        self.num_feature_columns = num_feature_columns
         with tf.compat.v1.variable_scope(self.name):
             self.all_embeddings=self.initialize_embeddings()
             self.inputs = tf.compat.v1.placeholder(tf.int32, [None, state_size])  # sequence of history, [batchsize,state_size]
@@ -208,7 +211,25 @@ class QNetwork:
                                                             activation=None)  # all q-values
 
             self.output2= tf.compat.v1.layers.dense(self.states_hidden, self.item_num,
-                                                             activation=None)  # all ce logits
+                                                             activation=None)  # all ce logits, phi score
+            
+            # get item features
+            self.item_features = tf.compat.v1.placeholder(tf.float32, [self.item_num, self.num_feature_columns])
+            # encode feature vectors to get embeddings (w(f)) and bias (b(b)) for all items
+            item_embeddings_and_bias = tf.compat.v1.layers.dense(self.item_features, self.hidden_size+1, activation=None)
+
+            # item embeddings: self.hidden_size columns 0 - dim(k)-1
+            item_embedding_indices = [i for i in range(self.hidden_size)]
+            item_embeddings = tf.gather(item_embeddings_and_bias, item_embedding_indices, axis=1)
+            # get bias from last column
+            bias = tf.gather(item_embeddings_and_bias, self.hidden_size, axis=1)
+
+            # calculate phi prime and phi tilde
+            item_embeddings_transpose = tf.transpose(item_embeddings)
+            phi_prime = tf.compat.v1.matmul(self.states_hidden, item_embeddings_transpose) + bias
+            phi_tilde = tf.math.scalar_mul((1-self.lambda_value), self.output2) + tf.math.scalar_muk(self.lambda_value, phi_prime)
+
+            
 
             # TRFL way
             self.actions = tf.compat.v1.placeholder(tf.int32, [None])
@@ -225,7 +246,6 @@ class QNetwork:
             self.targetQ_current_selector = tf.compat.v1.placeholder(tf.float32, [None,
                                                                  item_num])  # used for select best action for double q learning
 
-
             # TRFL double qlearning
             qloss_positive, _ = trfl.double_qlearning(self.output1, self.actions, self.reward, self.discount,
                                                       self.targetQs_, self.targetQs_selector)
@@ -238,9 +258,10 @@ class QNetwork:
                                                                           self.discount, self.targetQ_current_,
                                                                           self.targetQ_current_selector)[0]
 
-            ce_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.actions, logits=self.output2)
-
-            self.loss = tf.reduce_mean(self.weight*(qloss_positive+qloss_negative)+ce_loss)
+            ce_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.actions, logits=phi_tilde)
+            
+            #turn off q learning by setting qloss_positive and qloss_negative to get item features only
+            self.loss = tf.reduce_mean(self.weight*(0+0)+ce_loss)
             self.opt = tf.compat.v1.train.AdamOptimizer(learning_rate).minimize(self.loss)
 
     def initialize_embeddings(self):
@@ -337,6 +358,10 @@ if __name__ == '__main__':
     # save_file = 'pretrain-GRU/%d' % (hidden_size)
 
     tf.compat.v1.reset_default_graph()
+    item_features_df=pd.read_pickle(os.path.join(data_directory, 'item_properties.df'))
+    num_feature_columns = len(item_features_df.columns)
+    item_features = np.array(item_features_df)
+
 
     QN_1 = QNetwork(name='QN_1', hidden_size=args.hidden_factor, learning_rate=args.lr, item_num=item_num,
                     state_size=state_size, pretrain=False)

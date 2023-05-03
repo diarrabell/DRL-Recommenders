@@ -1,12 +1,13 @@
 import argparse
 import os
 import subprocess
+from item import ItemFeatures
 from preprocess_and_split import DataPreparation
 from popularity import Popularity
 from replay_buffer import ReplayBuffer
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Set up for using SNQN recommender')
+    parser = argparse.ArgumentParser(description='Set up before using SNQN')
 
     parser.add_argument('--data_directory', nargs='?',
         help='data directory for the H&M dataset')
@@ -25,13 +26,23 @@ def main():
       os.path.join(data_directory, '..', 'src/download.sh'))
     subprocess.call([download_file_path, data_directory])
 
+    item_features = ItemFeatures(data_directory)
+
+    #Retrieve item properties df
+    item_properties_df = item_features.create_df()
+
+    # Create sorted events
     data_preparation = DataPreparation(data_directory)
-    # Created sorted events from dataset
+
     # Retrieve total number of items for statistics dictionary
-    num_total_items = data_preparation.preprocess(num_total_sessions)
+    num_total_items, item_encoder, item_ids_from_events = data_preparation.preprocess(num_total_sessions, item_properties_df)
+
     # Split sorted events into training, validation, and test sessions
     data_preparation.split()
 
+    # Create item features
+    item_features.create_features(item_properties_df, item_encoder, item_ids_from_events)
+    
     # Create popularity dictionary
     popularity = Popularity(data_directory)
     popularity.create()

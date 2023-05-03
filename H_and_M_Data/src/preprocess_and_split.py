@@ -8,7 +8,7 @@ class DataPreparation:
     def __init__(self, data_directory):
         self.data_directory = data_directory
 
-    def preprocess(self, num_total_sessions):
+    def preprocess(self, num_total_sessions, item_properties_df):
         print('Started to read and modify transactions_train')
         # Read file with column names in the first row
         all_transactions_df = pd.read_csv(os.path.join(self.data_directory, 'transactions_train.csv'), header=0)
@@ -20,6 +20,10 @@ class DataPreparation:
         num_total_items = len(all_transactions_df['article_id'].unique())
         print(f'There are {num_total_items} total items from transactions_train')
 
+        # Filter for events that have corresponding item properties
+        item_ids_from_properties = item_properties_df['itemid'].unique()
+        all_transactions_df=all_transactions_df[all_transactions_df['item_id'].isin(item_ids_from_properties)]
+
         # Label encode 'article_id' (0 to N-1, where N is the number of total items)
         item_encoder = LabelEncoder()
         all_transactions_df['article_id'] = item_encoder.fit_transform(all_transactions_df.article_id)
@@ -28,7 +32,7 @@ class DataPreparation:
         session_encoder = LabelEncoder()
         all_transactions_df['customer_id'] = session_encoder.fit_transform(all_transactions_df.customer_id)
 
-        # Rename 'article_id' and 'customer_id' to matche the field names in the code
+        # Rename 'article_id' and 'customer_id' to match the field names in the code
         # Rename 't_dat' to 'date' to make column name more clear
         all_transactions_df = all_transactions_df.rename(columns={'article_id': 'item_id',
             'customer_id': 'session_id', 't_dat': 'date'})
@@ -60,7 +64,7 @@ class DataPreparation:
         # Create file 'sorted_events.df'
         to_pickled_df(self.data_directory, sorted_events=sorted_transactions_df)
         print('Finished creating the sorted_events file')
-        return num_total_items
+        return num_total_items, item_encoder, item_ids_from_properties
 
     def split(self):
         print('Started to split the sorted events into train, validation, and test')
