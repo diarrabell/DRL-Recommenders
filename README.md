@@ -3,9 +3,8 @@
 AIPI 531 Take Home Project
 
 ## Project Objectives
-- Train the SNQN ([Supervised Negative
-Q-learning](https://arxiv.org/pdf/2111.03474.pdf])) product recommendation recommender
-for two E-commerce use cases.
+- Train variations of the SNQN ([Supervised Negative
+Q-learning](https://arxiv.org/pdf/2111.03474.pdf])) product recommendation recommender for two E-commerce use cases and compare the performances.
 - Include item features as side information for cold-start items.
 - Use two offline evaluation metrics for benchmarking.
 
@@ -19,7 +18,7 @@ Retail Rocket provides shoppers with personalized real-time recommendations thro
 ## SNQN Recommender Overview
 The SNQN, or Supervised Negative Q-learning, recommender, addresses the challenges of applying reinforcment learning algorithms directly. SNQN addresses the issue with no real-time feedback during off-policy learning by combining supervised sequential learning with reinforcement learning. Additionally, there often is a lack of sufficient reward signals available, especially negative reward signals, and using only positive reward signals causes the Q-values to be overestimated. The Q-learning loss function of SNQN incorporates action rewards for a sampled set of negative, or unobserved, actions in addition to the positive ones. The deep reinforcement learning portion therefore acts as a self-regularizer by giving higher rewards to positive actions.
 
-In this project, GRU is used as the base model.
+In this project, GRU is used as the base model, and it is used twice per dataset with the SNQN recommender: The original SNQN recommender will be used, along with a modified SNQN recommender that incorporates item features.
 
 ## Incorporating Item Features into the SNQN Recommender
 The project uses some components from the **HRNN-meta**, or hierarchical recurrent network with meta data, model. HRNN-meta incorporates user and item features into the recommendation systems through learned embeddings in order to adapt to preferences in real-time and address the "cold-start" problem for new users and items that have not been interacted with yet. 
@@ -35,7 +34,7 @@ For Retail Rocket, please refer to first two sections from the [README for the d
 The offline evaluation metrics used are Hit Ratio (HR@k) and Normalized Discounted Cumulative Gain (NDCG@k). HR@k is the ratio of ground-truth items that are in the top k slots of the recommendation ranking. NDCG@k represents how relevant the top k ranked items are, and a higher score indicates that relevant products are given higher rankings.
 
 The following results are for purchases.
-### Results for the H&M Dataset
+### Results for the H&M Dataset Without Item Features
 #### Hit Ratio at K
 |  HR@5 | HR@10 | HR@15 | HR@20 |
 | --- | --- | --- | --- |
@@ -46,7 +45,29 @@ The following results are for purchases.
 | --- | --- | --- | --- |
 |     |     |     |     |
 
-### Results for the Retail Rocket Dataset
+### Results for the H&M Dataset With Item Features
+#### Hit Ratio at K
+|  HR@5 | HR@10 | HR@15 | HR@20 |
+| --- | --- | --- | --- |
+|     |     |     |     |
+
+####  Normalized Discounted Cumulative Gain at K
+|  NG@5 | NG@10 | NG@15 | NG@20 |
+| --- | --- | --- | --- |
+|     |     |     |     |
+
+### Results for the Retail Rocket Dataset Without Item Features
+#### Hit Ratio at K
+|  HR@5 | HR@10 | HR@15 | HR@20 |
+| --- | --- | --- | --- |
+|  0.4410 | 0.5007 | 0.5294 | 0.5471 |
+
+####  Normalized Discounted Cumulative Gain at K
+|  NG@5 | NG@10 | NG@15 | NG@20 |
+| --- | --- | --- | --- |
+| 0.3579| 0.3774| 0.3850| 0.3892 |
+
+### Results for the Retail Rocket Dataset With Item Features
 #### Hit Ratio at K
 |  HR@5 | HR@10 | HR@15 | HR@20 |
 | --- | --- | --- | --- |
