@@ -31,6 +31,7 @@ class ItemFeatures:
         le = LabelEncoder()
         cols = item_properties_df.columns.tolist()
         cols = cols.remove('article_id') 
+        print(item_properties_df[cols])
         item_properties_df = item_properties_df[cols].apply(le.fit_transform)
         to_pickled_df(self.data_directory, item_properties=item_properties_df)
         print("finished creating item features")
