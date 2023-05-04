@@ -22,6 +22,8 @@ def parse_args():
     #                     help='flag for pretrain. 1: initialize from pretrain; 0: randomly initialize; -1: save the model to pretrain file')
     parser.add_argument('--batch_size', type=int, default=256,
                         help='Batch size.')
+    parser.add_argument('--eval_batch_size', type=int, default=30,
+                        help='Eval batch size.')
     parser.add_argument('--hidden_factor', type=int, default=64,
                         help='Number of hidden factors, i.e., embedding size.')
     parser.add_argument('--r_click', type=float, default=0.2,
@@ -265,8 +267,10 @@ class QNetwork:
         #     print("load!")
         return all_embeddings
 
-def evaluate(sess):
-    eval_sessions=pd.read_pickle(os.path.join(data_directory, 'sampled_val.df'))
+def evaluate(sess, datatype='val'):
+    batch = eval_batch_size
+    print(f'evaluating with {datatype} data')
+    eval_sessions=pd.read_pickle(os.path.join(data_directory, 'sampled_{data_type}.df'))
     eval_ids = eval_sessions.session_id.unique()
     groups = eval_sessions.groupby('session_id')
     batch = 100
@@ -322,7 +326,7 @@ def evaluate(sess):
 if __name__ == '__main__':
     # Network parameters
     args = parse_args()
-
+    eval_batch_size = args.eval_batch_size
     data_directory = args.data
     data_statis = pd.read_pickle(
         os.path.join(data_directory, 'data_statis.df'))  # read data statistics, includeing state_size and item_num
@@ -427,3 +431,5 @@ if __name__ == '__main__':
                     print("the loss in %dth batch is: %f" % (total_step, loss))
                 if total_step % 4000 == 0:
                     evaluate(sess)
+        print('Finished training!')
+        evaluate(sess, data_type='test')
