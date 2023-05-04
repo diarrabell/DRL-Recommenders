@@ -270,10 +270,10 @@ class QNetwork:
 def evaluate(sess, datatype='val'):
     batch = eval_batch_size
     print(f'evaluating with {datatype} data')
-    eval_sessions=pd.read_pickle(os.path.join(data_directory, 'sampled_{data_type}.df'))
+    eval_sessions=pd.read_pickle(os.path.join(data_directory, 'sampled_{datatype}.df'))
     eval_ids = eval_sessions.session_id.unique()
     groups = eval_sessions.groupby('session_id')
-    batch = 100
+    batch=100
     evaluated=0
     total_clicks=0.0
     total_purchase = 0.0
@@ -432,4 +432,4 @@ if __name__ == '__main__':
                 if total_step % 4000 == 0:
                     evaluate(sess)
         print('Finished training!')
-        evaluate(sess, data_type='test')
+        evaluate(sess, datatype='test')
