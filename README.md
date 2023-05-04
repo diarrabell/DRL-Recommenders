@@ -11,7 +11,10 @@ Q-learning](https://arxiv.org/pdf/2111.03474.pdf])) product recommendation recom
 ## Datasets Overview
 The following datasets were chosen for training.
 #### H&M Dataset
-
+H&M is a global commerce company that specializes in Women's and Men's fashion. The dataset we are using comes from a Kaggle competition where users are tasked to use past H&M data to provide product recommendations: https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data 
+The dataset files we are using for this project are: 
+*transactions_train.csv* - consisting of previous purchases made by customers. Information includes item ID, customer ID, and price, and date.
+*articles.csv* - consists of item characteristics such as appearance, color and category.
 #### Retail Rocket Dataset
 Retail Rocket provides shoppers with personalized real-time recommendations through multiple channels. The [dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset) contains four files that includes raw data collected from a real-world ecommerce website. All files except for category_tree.csv are used. events.csv contains interaction information for each user, including the timestamp of the interaction, the event type (click, add to cart, or transaction), and the item ID. There are two item_properties.csv files that provide more details on the items for about 90% of the interactions from events.csv. The item property and property values have been hashed for confidentiality purposes.  
 
@@ -26,7 +29,10 @@ The project uses some components from the **HRNN-meta**, or hierarchical recurre
 More specifically, the project uses equation 2 of the [HRNN paper](https://assets.amazon.science/96/71/d1f25754497681133c7aa2b7eb05/temporal-contextual-recommendation-in-real-time.pdf) to incorporate item features only. The learned weights and bias of the item feature vectors are used to calculate phi-prime, and phi-prime and the logits from the GRU model are combined using a lambda value to get the phi-tilde value, which is used as the logits for calculating the cross-entropy loss. 
 
 ## Steps for Setting Up and Running the Code
-For H&M,...
+For H&M, open the H&M_Recommenders.ipynb notebook in the H_and_M_Data folder and run all cells. 
+To run this notebook, you will need to have access to the [Kaggle API](https://github.com/Kaggle/kaggle-api).  When prompted, upload your kaggle.json file to continue running the file.
+The first model trained is an SNQN model without item features.
+The second model trained is a GRU4Rec model with item features.
 
 For Retail Rocket, please refer to first two sections from the [README for the dataset](https://github.com/sfhorng/AIPI-531-Final-Project/tree/main/Retail_Rocket_Data).
 
