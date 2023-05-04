@@ -227,7 +227,8 @@ class QNetwork:
             # calculate phi prime and phi tilde
             item_embeddings_transpose = tf.transpose(item_embeddings)
             phi_prime = tf.compat.v1.matmul(self.states_hidden, item_embeddings_transpose) + bias
-            phi_tilde = tf.math.scalar_mul((1-self.lambda_value), self.output2) + tf.math.scalar_muk(self.lambda_value, phi_prime)
+            phi_tilde = tf.math.scalar_mul((1 - self.lambda_value), self.output2) + \
+                tf.math.scalar_mul(self.lambda_value, phi_prime)
 
             
 
