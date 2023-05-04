@@ -22,7 +22,7 @@ class DataPreparation:
 
         # Filter for events that have corresponding item properties
         item_ids_from_properties = item_properties_df['article_id'].unique()
-        all_transactions_df=all_transactions_df[all_transactions_df['item_id'].isin(item_ids_from_properties)]
+        all_transactions_df=all_transactions_df[all_transactions_df['article_id'].isin(item_ids_from_properties)]
 
         # Label encode 'article_id' (0 to N-1, where N is the number of total items)
         item_encoder = LabelEncoder()
