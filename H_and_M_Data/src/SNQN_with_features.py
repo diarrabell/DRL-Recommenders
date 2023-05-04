@@ -287,7 +287,7 @@ class QNetwork:
         #     print("load!")
         return all_embeddings
 
-def evaluate(sess, data_type='val'):
+def evaluate(sess, item_features, data_type='val'):
     print(f'Evaluating with {data_type} sessions')
     eval_sessions=pd.read_pickle(os.path.join(data_directory, f'sampled_{data_type}.df'))
     eval_ids = eval_sessions.session_id.unique()
@@ -326,7 +326,7 @@ def evaluate(sess, data_type='val'):
                 rewards.append(reward)
                 history.append(row['item_id'])
             evaluated+=1
-        prediction=sess.run(QN_1.output2, feed_dict={QN_1.inputs: states,QN_1.len_state:len_states,QN_1.is_training:False})
+        prediction=sess.run(QN_1.output2, feed_dict={QN_1.inputs: states,QN_1.len_state:len_states,QN_1.is_training:False, QN_1.item_features:item_features})
         sorted_list=np.argsort(prediction)
         calculate_hit(sorted_list,topk,actions,rewards,reward_click,total_reward,hit_clicks,ndcg_clicks,hit_purchase,ndcg_purchase)
     print('#############################################################')
@@ -401,11 +401,11 @@ if __name__ == '__main__':
                 target_Qs = sess.run(target_QN.output1,
                                      feed_dict={target_QN.inputs: next_state,
                                                 target_QN.len_state: len_next_state,
-                                                target_QN.is_training:True})
+                                                target_QN.is_training:True, target_QN.item_features: item_features})
                 target_Qs_selector = sess.run(mainQN.output1,
                                               feed_dict={mainQN.inputs: next_state,
                                                          mainQN.len_state: len_next_state,
-                                                         mainQN.is_training:True})
+                                                         mainQN.is_training:True, mainQN.item_features: item_features})
                 # Set target_Qs to 0 for states where episode ends
                 is_done = list(batch['is_done'].values())
                 for index in range(target_Qs.shape[0]):
@@ -417,11 +417,11 @@ if __name__ == '__main__':
                 target_Q_current = sess.run(target_QN.output1,
                                             feed_dict={target_QN.inputs: state,
                                                        target_QN.len_state: len_state,
-                                                       target_QN.is_training:True})
+                                                       target_QN.is_training:True, target_QN.item_features: item_features})
                 target_Q__current_selector = sess.run(mainQN.output1,
                                                       feed_dict={mainQN.inputs: state,
                                                                  mainQN.len_state: len_state,
-                                                                 mainQN.is_training:True})
+                                                                 mainQN.is_training:True, target_QN.item_features: item_features})
                 action = list(batch['action'].values())
                 negative=[]
 
@@ -451,12 +451,13 @@ if __name__ == '__main__':
                                               mainQN.negative_actions:negative,
                                               mainQN.targetQ_current_:target_Q_current,
                                               mainQN.targetQ_current_selector:target_Q__current_selector,
-                                              mainQN.is_training:True
+                                              mainQN.is_training:True,
+                                              mainQN.item_features: item_features
                                               })
                 total_step += 1
                 if total_step % 200 == 0:
                     print("the loss in %dth batch is: %f" % (total_step, loss))
                 if total_step % 4000 == 0:
-                    evaluate(sess)
+                    evaluate(sess, item_features)
         print('Finished training')
-        evaluate(sess, data_type='test')
+        evaluate(sess, item_features, data_type='test')

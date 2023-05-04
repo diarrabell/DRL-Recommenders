@@ -348,7 +348,7 @@ if __name__ == '__main__':
     with tf.compat.v1.Session() as sess:
         # Initialize variables
         sess.run(tf.compat.v1.global_variables_initializer())
-        evaluate(sess)
+        #evaluate(sess)
         num_rows=replay_buffer.shape[0]
         num_batches=int(num_rows/args.batch_size)
         for i in range(args.epoch):
