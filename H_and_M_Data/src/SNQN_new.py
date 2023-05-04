@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import argparse
 from collections import deque
-from utility import pad_history,calculate_hit
+from utility_new import pad_history,calculate_hit
 from NextItNetModules import *
 from SASRecModules import *
 
