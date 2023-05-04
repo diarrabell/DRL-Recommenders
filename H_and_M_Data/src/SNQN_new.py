@@ -356,9 +356,10 @@ if __name__ == '__main__':
         num_rows=replay_buffer.shape[0]
         num_batches=int(num_rows/args.batch_size)
         for i in range(args.epoch):
+            print(f'Epoch {i+1}/{args.epoch}')
+            print(f'Number of batches: {num_batches}')
             for j in range(num_batches):
                 batch = replay_buffer.sample(n=args.batch_size).to_dict()
-
                 #state = list(batch['state'].values())
 
                 next_state = list(batch['next_state'].values())

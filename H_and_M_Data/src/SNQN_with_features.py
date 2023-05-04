@@ -383,6 +383,7 @@ if __name__ == '__main__':
         print(f'Number of batches: {num_batches}')
         for i in range(args.epoch):
             print(f'Epoch {i+1}/{args.epoch}')
+            print(f'Number of batches: {num_batches}')
             for j in range(num_batches):
                 batch = replay_buffer.sample(n=args.batch_size).to_dict()
 
