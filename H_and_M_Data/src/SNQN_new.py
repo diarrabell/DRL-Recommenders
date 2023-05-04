@@ -5,8 +5,8 @@ import os
 import argparse
 from collections import deque
 from utility_new import pad_history,calculate_hit
-from NextItNetModules import *
-from SASRecModules import *
+from NextItNetModules_new import *
+from SASRecModules_new import *
 
 import trfl
 from trfl import indexing_ops
