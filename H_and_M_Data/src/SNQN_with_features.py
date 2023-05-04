@@ -364,9 +364,9 @@ if __name__ == '__main__':
 
 
     QN_1 = QNetwork(name='QN_1', hidden_size=args.hidden_factor, learning_rate=args.lr, item_num=item_num,
-                    state_size=state_size, pretrain=False)
+                    state_size=state_size, pretrain=False, lambda_value=args.lambda_val, num_feature_columns=num_feature_columns)
     QN_2 = QNetwork(name='QN_2', hidden_size=args.hidden_factor, learning_rate=args.lr, item_num=item_num,
-                    state_size=state_size, pretrain=False)
+                    state_size=state_size, pretrain=False, lambda_value=args.lambda_val, num_feature_columns=num_feature_columns)
 
     replay_buffer = pd.read_pickle(os.path.join(data_directory, 'replay_buffer.df'))
     # saver = tf.train.Saver()
