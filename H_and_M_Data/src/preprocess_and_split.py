@@ -16,6 +16,8 @@ class DataPreparation:
         # Drop columns that aren't needed
         all_transactions_df = all_transactions_df.drop(columns=['price', 'sales_channel_id'])
 
+        print("events df items:", len(all_transactions_df['article_id'].unique()))
+
         # Retrieve total number of unique items
         num_total_items = len(all_transactions_df['article_id'].unique())
         print(f'There are {num_total_items} total items from transactions_train')
@@ -25,7 +27,7 @@ class DataPreparation:
         all_transactions_df=all_transactions_df[all_transactions_df['article_id'].isin(item_ids_from_properties)]
         
         print("item properties items:", len(item_properties_df['article_id'].unique()))
-        print("events df items:", len(all_transactions_df['article_id'].unique()))
+       
 
         # Label encode 'article_id' (0 to N-1, where N is the number of total items)
         item_encoder = LabelEncoder()
