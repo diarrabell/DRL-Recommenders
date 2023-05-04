@@ -270,7 +270,7 @@ class QNetwork:
 def evaluate(sess, datatype='val'):
     batch = eval_batch_size
     print(f'evaluating with {datatype} data')
-    eval_sessions=pd.read_pickle(os.path.join(data_directory, 'sampled_{datatype}.df'))
+    eval_sessions=pd.read_pickle(os.path.join(data_directory, f'sampled_{datatype}.df'))
     eval_ids = eval_sessions.session_id.unique()
     groups = eval_sessions.groupby('session_id')
     batch=100
