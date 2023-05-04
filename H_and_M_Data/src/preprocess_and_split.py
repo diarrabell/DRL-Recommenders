@@ -24,7 +24,10 @@ class DataPreparation:
 
         # Filter for events that have corresponding item properties
         item_ids_from_properties = item_properties_df['article_id'].unique()
+
         all_transactions_df=all_transactions_df[all_transactions_df['article_id'].isin(item_ids_from_properties)]
+
+        item_ids_from_events = all_transactions_df['article_id'].unique()
         
         print("item properties items:", len(item_properties_df['article_id'].unique()))
        
@@ -69,7 +72,7 @@ class DataPreparation:
         # Create file 'sorted_events.df'
         to_pickled_df(self.data_directory, sorted_events=sorted_transactions_df)
         print('Finished creating the sorted_events file')
-        return num_total_items, item_encoder, item_ids_from_properties
+        return num_total_items, item_encoder, item_ids_from_events
 
     def split(self):
         print('Started to split the sorted events into train, validation, and test')
