@@ -2,6 +2,8 @@
 
 AIPI 531 Take Home Project
 
+Diarra Bell and Stephanie Horng
+
 ## Project Objectives
 - Train variations of the SNQN ([Supervised Negative
 Q-learning](https://arxiv.org/pdf/2111.03474.pdf])) product recommendation recommender for two E-commerce use cases and compare the performances.
