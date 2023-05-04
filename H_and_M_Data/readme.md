@@ -14,7 +14,7 @@ The src folder contains the source code from the original DRL paper. New and edi
 - SNQN_new.py : an optimized version of the original SNQN model 
 - SNQN_with_features: a version of the original SNQN that uses GRU only (q learning disabled) and includes item features
 
-#How to Run:
+## How to Run:
 - Open H&M_Recommenders.ipynb
 - Make sure runtime is set to GPU, preferably High RAM
 - Run all cells. You will be asked for your Kaggle API access token. Upload your token to download kaggle data and complete training. 
