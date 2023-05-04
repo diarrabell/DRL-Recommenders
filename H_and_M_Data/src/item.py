@@ -29,7 +29,7 @@ class ItemFeatures:
         item_properties_df['article_id'] = item_encoder.transform(item_properties_df.article_id)
         #create label encoder and encode item properties 
         le = LabelEncoder()
-        cols = item_properties_df.columns
+        cols = item_properties_df.columns.values.tolist()
         print(cols, type(cols))
         cols = cols.remove('article_id') 
         print(cols)
