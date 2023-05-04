@@ -214,7 +214,7 @@ class QNetwork:
                                                              activation=None)  # all ce logits, phi score
             
             # get item features
-            self.item_features = tf.compat.v1.placeholder(tf.float32, [self.item_num, self.num_feature_columns])
+            self.item_features = tf.compat.v1.placeholder(tf.int64, [self.item_num, self.num_feature_columns])
             # encode feature vectors to get embeddings (w(f)) and bias (b(b)) for all items
             item_embeddings_and_bias = tf.compat.v1.layers.dense(self.item_features, self.hidden_size+1, activation=None)
 
