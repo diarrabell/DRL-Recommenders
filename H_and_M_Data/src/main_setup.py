@@ -22,9 +22,9 @@ def main():
     num_total_sessions = int(args.num_total_sessions)
 
     # Download data to directory
-    download_file_path = os.path.abspath(
-      os.path.join(data_directory, '..', 'src/download.sh'))
-    subprocess.call([download_file_path, data_directory])
+    # download_file_path = os.path.abspath(
+    #   os.path.join(data_directory, '..', 'src/download.sh'))
+    # subprocess.call([download_file_path, data_directory])
 
     item_features = ItemFeatures(data_directory)
 
