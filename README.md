@@ -45,13 +45,13 @@ The following results are for purchases.
 ### Results for the H&M Dataset Without Item Features
 #### Hit Ratio at K
 |  HR@5 | HR@10 | HR@15 | HR@20 |
-| --- | --- | --- | --- |
-|     |     |     |     |
+| ---   |  ---  |  ---  |  ---  |
+| 0.019 | 0.026 | 0.033 | 0.036 |
 
 ####  Normalized Discounted Cumulative Gain at K
 |  NG@5 | NG@10 | NG@15 | NG@20 |
-| --- | --- | --- | --- |
-|     |     |     |     |
+| ---   | ---   | ---   | ---   |
+| 0.014 | 0.016 | 0.018 | 0.019 |
 
 ### Results for the H&M Dataset With Item Features
 #### Hit Ratio at K
