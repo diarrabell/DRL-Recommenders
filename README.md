@@ -57,12 +57,12 @@ The following results are for purchases.
 #### Hit Ratio at K
 |  HR@5 | HR@10 | HR@15 | HR@20 |
 | --- | --- | --- | --- |
-|     |     |     |     |
+|  0.005  |  0.007   | 0.009    | 0.011    |
 
 ####  Normalized Discounted Cumulative Gain at K
 |  NG@5 | NG@10 | NG@15 | NG@20 |
 | --- | --- | --- | --- |
-|     |     |     |     |
+| 0.0035 |  0.0040 |  0.0045 | 0.0051 |
 
 ### Results for the Retail Rocket Dataset Without Item Features
 #### Hit Ratio at K
